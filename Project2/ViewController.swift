@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     var countries = [String]()
     var score = 0
     var correctAnswer = 0
+    var questionCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,27 +48,50 @@ class ViewController: UIViewController {
         button3.setImage(UIImage(named: countries[2]),
         for: .normal)
         
-        title = countries[correctAnswer].uppercased()
+        title = countries[correctAnswer].uppercased() + "    Total score:\(score)"
+        questionCount += 1
     }
 
     @IBAction func buttonTapped(_ sender: UIButton) {
         var title: String
+        var msg: String
         
         if sender.tag == correctAnswer {
             title = "Correct"
             score += 1
+            msg = "Your score is \(score)"
         } else {
             title = "Wrong"
             score -= 1
+            msg = "Wrong answer! Your score is \(score)"
+            
+        }
+        
+        if ( questionCount == 10 ) {
+            var fTitle: String
+                fTitle = "You have answer 10 questions"
+            var tmp = 0
+            tmp = score
+            var fScore: String
+                fScore = "Your total score is \(tmp)"
+            questionCount = 0
+            score = 0
+            let qc = UIAlertController(title: fTitle, message: fScore,
+                preferredStyle: .alert)
+            qc.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
+            
+            present(qc, animated: true)
         }
         
         let ac = UIAlertController(title: title, message:
-                "Your score is \(score)", preferredStyle:
+                msg, preferredStyle:
             .alert)
         
         ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
         
         present(ac, animated: true)
+        
+        
     }
     
 }
